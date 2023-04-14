@@ -64,6 +64,7 @@ endif()
 # 3rd party libs
 option(LLAMA_ACCELERATE             "llama: enable Accelerate framework"                    ON)
 option(LLAMA_OPENBLAS               "llama: use OpenBLAS"                                   OFF)
+option(LLAMA_GRPC                   "llama: use gRPC API interface"                         ON)
 
 option(LLAMA_BUILD_TESTS            "llama: build tests"    ${LLAMA_STANDALONE})
 option(LLAMA_BUILD_EXAMPLES         "llama: build examples" ${LLAMA_STANDALONE})
@@ -123,6 +124,14 @@ if (LLAMA_OPENBLAS)
     else()
         message(WARNING "OpenBLAS not found")
     endif()
+endif()
+
+if (LLAMA_GRPC)
+    find_package(Protobuf REQUIRED)
+    find_package(gRPC REQUIRED)
+    # Add the generated protobuf headers to the include path
+    include_directories(${PROTOBUF_INCLUDE_DIRS})
+    include_directories(${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
 if (LLAMA_ALL_WARNINGS)

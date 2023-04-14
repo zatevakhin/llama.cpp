@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package gpt;
+
+message GptParams {
+    int32 seed = 1;
+    int32 n_threads = 2;
+    int32 n_predict = 3;
+    int32 repeat_last_n = 4;
+    int32 n_parts = 5;
+    int32 n_ctx = 6;
+    int32 n_batch = 7;
+    int32 n_keep = 8;
+    int32 top_k = 9;
+    float top_p = 10;
+    float temp = 11;
+    float repeat_penalty = 12;
+    string model = 13;
+    string prompt = 14;
+    string input_prefix = 15;
+    repeated string antiprompt = 16;
+    bool memory_f16 = 17;
+    bool random_prompt = 18;
+    bool use_color = 19;
+    bool interactive = 20;
+    bool embedding = 21;
+    bool interactive_start = 22;
+    bool instruct = 23;
+    bool ignore_eos = 24;
+    bool perplexity = 25;
+    bool use_mmap = 26;
+    bool use_mlock = 27;
+    bool mem_test = 28;
+    bool verbose_prompt = 29;
+}
+
+
+message SetupDone {
+    string instance_id = 1;
+}
+
+message GptQuery {
+    string instance_id = 1;
+    string prompt = 2;
+}
+
+message GptAnswer {
+    string message = 1;
+}
+
+
+service GptService {
+    rpc RunGpt (GptParams) returns (SetupDone) {}
+    rpc AskGpt (GptQuery) returns (stream GptAnswer) {}
+}
